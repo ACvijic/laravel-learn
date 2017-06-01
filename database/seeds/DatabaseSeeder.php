@@ -40,6 +40,6 @@ class DatabaseSeeder extends Seeder
 //        $this->call(LessonsTableSeeder::class);
 //        $this->call(LessonTagTableSeeder::class);
         
-        $this->call(LanguagesTableSeeder::class);
+        $this->call(PostsTableSeeder::class);
     }
 }

@@ -13,14 +13,14 @@ class CreateLessonTagPivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('lesson_tag', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('lesson_id')->unsigned();
-            $table->foreign('lesson_id')->references('id')->on('lessons')->onDelete('cascade');
-            $table->integer('tag_id')->unsigned();
-            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
-            $table->timestamps();
-        });
+//        Schema::create('lesson_tag', function (Blueprint $table) {
+//            $table->increments('id');
+//            $table->integer('lesson_id')->unsigned();
+//            $table->foreign('lesson_id')->references('id')->on('lessons')->onDelete('cascade');
+//            $table->integer('tag_id')->unsigned();
+//            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+//            $table->timestamps();
+//        });
     }
 
     /**

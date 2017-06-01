@@ -42,15 +42,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-right">
-
-                                </td>
-                            </tr>
+                            
                         </tbody>
                         <tfoot>
                             <th></th>
@@ -138,6 +130,9 @@ $(document).ready(function() {
     
     
     var table = $('#dataTables-example').DataTable({
+        dom: 
+            "<'top'<'col-sm-4 pull-left'l><'col-sm-4 text-center'f><'col-sm-4 pull-right'p>>rt" + 
+            "<'bottom'<'col-sm-4 pull-left'i><'col-sm-4 col-sm-offset-4 text-center'p>><'clear'>",
         order: [ 1, "asc" ],
         responsive: true,
         columnDefs: [
@@ -146,6 +141,10 @@ $(document).ready(function() {
             },
             { 
                 searchable: false, targets: [0,4]
+            },
+            {
+                className: "text-center", targets: [-1]
+//                className: "dt-center", targets: "_all"
             }
         ],
         serverSide: true,
@@ -174,38 +173,47 @@ $(document).ready(function() {
         table.draw();
     });
     
-    
-});
+
 
 
 $('#myModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var postId = button.data('postid');
-    var postHref = button.data('href');
-    var postTitle = button.data('posttitle');// Extract info from data-* attributes
+    var button = $(event.relatedTarget), // Button that triggered the modal
+        postId = button.data('postid'),
+        action = button.data('id'),
+        postHref = button.data('href'),
+        postTitle = button.data('posttitle'),// Extract info from data-* attributes
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    var modal = $(this);
+        modal = $(this);
+        
     modal.find('.modal-title').text(button.data('modaltitle'));
     modal.find('.modal-body').text(button.data('modalbody'));
     modal.find('.modal-button').text(button.data('buttontext'));
-    modal.find('.modal-button').on("click", function(e){
-        e.preventDefault();
-        $.ajax({
-            url:"{{ route('posts-change-status') }}",
-            method: 'POST',
-            data: {
-                id: postId,
-                _token: '{{ csrf_token() }}',
-            }, 
-            success: function(){ // What to do if we succeed
-                alert('Status changed successfully!'); 
-            },
-            error: function(){
-                alert('Sth went wrong');
-            }
-        });
+    modal.find('.modal-button').attr('id', button.data('postid'));
+    modal.find('.modal-button').data('action', button.data('id'));
+    
+});
+
+var modal = $('#myModal');
+modal.find('.modal-button').on("click", function(e){
+    e.preventDefault();
+    $.ajax({
+        url:"{{ route('change-posts') }}",
+        type: 'POST',
+        data: {
+            id: $(this).attr('id'),
+            action: $(this).data('action'),
+            _token: '{{ csrf_token() }}',
+        }, 
+        success: function(){ // What to do if we succeed
+            alert('Status changed successfully!'); 
+        },
+        error: function(){
+            alert('Something went wrong... ');
+        }
     });
+    table.draw(false);
+     $('#myModal').modal('toggle')
 });
 
 $('#imagePreviewModal').on('show.bs.modal', function (event) {
@@ -219,7 +227,8 @@ $('#imagePreviewModal').on('show.bs.modal', function (event) {
 
 $(function () {
   $('.btn-tooltip').tooltip();
-})
-
+});
+    
+});
 </script>
 @endsection

@@ -130,7 +130,7 @@ Route::get('/posts', 'PostsController@index')->name('posts-list');
 
 Route::any('/posts/dataTable', 'PostsController@dataTable');
 
-Route::any('/posts/change-status', 'PostsController@changeStatus')->name('posts-change-status');
+Route::any('/posts/change-status', 'PostsController@changePosts')->name('change-posts');
 // POSTS ROUTES END
 
 // FRONTEND ROUTES START

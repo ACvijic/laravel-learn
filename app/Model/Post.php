@@ -17,10 +17,10 @@ class Post extends Model {
     public static function countPosts($filters = []) {
 
         if (!empty($filters)) {
-            $count = Post::proccessFilter($filters)->count();
+            $count = Post::proccessFilter($filters)->where('deleted', '=', 0)->count();
         } else {
 
-            $count = Post::count();
+            $count = Post::where('deleted', '=', 0)->count();
         }
 
         return $count;
@@ -54,7 +54,7 @@ class Post extends Model {
     }
 
     public static function search($parameters) {
-        $result = Post::order($parameters['order']);
+        $result = Post::where('deleted', '=', 0)->order($parameters['order']);
         $result = $result->skip($parameters['limit'] * $parameters['page'])->take($parameters['limit']);
         $result = $result->proccessFilter($parameters['filters'])->get();
         return $result;

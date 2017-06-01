@@ -15,17 +15,34 @@ class PostsController extends Controller {
         return view('posts.index');
     }
     
-    public function changeStatus(Request $request){
+    public function changePosts(Request $request){
         $data = $request->all();
         
-        $post = Post::find($data['id']);
-        if($post->status == 1){
-            $post->status = 0;
-        }else{
-            $post->status = 1;
+        switch ($data['action']) {
+            case 'change_status':
+                $post = Post::find($data['id']);
+                if($post->status == 1){
+                    $post->status = 0;
+                }else{
+                    $post->status = 1;
+                }
+
+                $post->save();
+                break;
+            case 'delete_image':
+                $post = Post::find($data['id']);
+                $post->image = "";
+
+                $post->save();
+                break;
+            case 'delete':
+                $post = Post::find($data['id']);
+                $post->deleted = 1;
+
+                $post->save();
+                break;
         }
-        
-        $post->save();
+        return;
         
     }
 
